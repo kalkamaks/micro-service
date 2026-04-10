@@ -1,0 +1,11 @@
+# Используем официальный образ NGINX на базе Alpine (легкий)
+FROM nginx:alpine
+
+# Копируем нашу конфигурацию в контейнер
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Открываем порт 80
+EXPOSE 80
+
+# Команда для запуска NGINX в foreground режиме
+CMD ["nginx", "-g", "daemon off;"]

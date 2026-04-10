@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: kalkamaks/micro-servicet-nginx:latest
+    ports:
+      - "80:80"
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    depends_on:
+      - user-service
+      - order-service
+    networks:
+      - microservices-network
+
+  user-service:
+    image: kalkamaks/micro-servicet-user:latest
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    networks:
+      - microservices-network
+
+  order-service:
+    image: kalkamaks/micro-servicet-order:latest
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: overlay
